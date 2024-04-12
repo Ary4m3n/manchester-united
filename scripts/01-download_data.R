@@ -1,26 +1,28 @@
 #### Preamble ####
-# Purpose: Downloads and saves the data from [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Downloads and saves the data from `worldfootballR`.
+# Author: Aryaman Sharma
+# Date: 12 April 2024
+# Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
-
+# Pre-requisites: Uncomment line number and run it once to install `worldfootballR`.
+# Any other information needed? The loop takes some time to run, so please wait for some time after running this file.
 
 #### Workspace setup ####
-library(opendatatoronto)
+
+# install.packages("worldfootballR")
+library(worldfootballR)
 library(tidyverse)
-# [...UPDATE THIS...]
 
 #### Download data ####
-# [...ADD CODE HERE TO DOWNLOAD...]
 
+# We run this in a loop to obtain raw data for the league table for a span of 20
+# years, i.e. 2004-2023.
+for (year in 2004:2023) {
+  league_table <- fb_season_team_stats("ENG", "M", year, "1st", "league_table")
 
-
-#### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
+  league_table_file_name <- paste0("data/raw_data/league_table_stats_", year, ".csv")
+  #### Save data ####
+  write_csv(league_table, league_table_file_name)
+}
 
          

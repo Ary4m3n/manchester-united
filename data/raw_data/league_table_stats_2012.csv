@@ -1,0 +1,21 @@
+Competition_Name,Gender,Country,Season_End_Year,Squad,Team_or_Opponent,Rk,MP,W,D,L,GF,GA,GD,Pts,Pts.MP,Attendance,Top.Team.Scorer,Goalkeeper,Notes
+Premier League,M,ENG,2012,Arsenal,team,3,38,21,7,10,74,49,25,70,1.84,60000,Robin van Persie - 30,Wojciech Szczęsny,→ Champions League via league finish
+Premier League,M,ENG,2012,Aston Villa,team,16,38,7,17,14,37,53,-16,38,1,33883,Darren Bent - 9,Shay Given,
+Premier League,M,ENG,2012,Blackburn,team,19,38,8,7,23,48,78,-30,31,0.82,22551,Yakubu Aiyegbeni - 17,Paul Robinson,Relegated
+Premier League,M,ENG,2012,Bolton,team,18,38,10,6,22,46,77,-31,36,0.95,23670,Ivan Klasnić - 8,Ádám Bogdán,Relegated
+Premier League,M,ENG,2012,Chelsea,team,6,38,18,10,10,65,46,19,64,1.68,41484,"Frank Lampard, Daniel Sturridge - 11",Petr Čech,→ Champions League via Champions League win
+Premier League,M,ENG,2012,Everton,team,7,38,15,11,12,50,40,10,56,1.47,33228,Nikica Jelavić - 9,Tim Howard,
+Premier League,M,ENG,2012,Fulham,team,9,38,14,10,14,48,51,-3,52,1.37,25399,Clint Dempsey - 17,Mark Schwarzer,
+Premier League,M,ENG,2012,Liverpool,team,8,38,14,10,14,47,40,7,52,1.37,44253,Luis Suárez - 11,Pepe Reina,→ Europa League via cup win 1
+Premier League,M,ENG,2012,Manchester City,team,1,38,28,5,5,93,29,64,89,2.34,47045,Sergio Agüero - 23,Joe Hart,→ Champions League via league finish
+Premier League,M,ENG,2012,Manchester Utd,team,2,38,28,5,5,89,33,56,89,2.34,75387,Wayne Rooney - 27,David de Gea,→ Champions League via league finish
+Premier League,M,ENG,2012,Newcastle Utd,team,5,38,19,8,11,56,51,5,65,1.71,49951,Demba Ba - 16,Tim Krul,→ Europa League via league finish
+Premier League,M,ENG,2012,Norwich City,team,12,38,12,11,15,52,66,-14,47,1.24,26606,Grant Holt - 15,John Ruddy,
+Premier League,M,ENG,2012,QPR,team,17,38,10,7,21,43,66,-23,37,0.97,17295,Heiðar Helguson - 8,Paddy Kenny,
+Premier League,M,ENG,2012,Stoke City,team,14,38,11,12,15,36,53,-17,45,1.18,27226,Peter Crouch - 10,Asmir Begović,
+Premier League,M,ENG,2012,Sunderland,team,13,38,11,12,15,45,46,-1,45,1.18,39047,Nicklas Bendtner - 8,Simon Mignolet,
+Premier League,M,ENG,2012,Swansea City,team,11,38,12,11,15,44,51,-7,47,1.24,19946,Danny Graham - 12,Michel Vorm,
+Premier League,M,ENG,2012,Tottenham,team,4,38,20,9,9,66,41,25,69,1.82,36036,Emmanuel Adebayor - 17,Brad Friedel,→ Europa League via league finish
+Premier League,M,ENG,2012,West Brom,team,10,38,13,8,17,45,52,-7,47,1.24,24770,Peter Odemwingie - 10,Ben Foster,
+Premier League,M,ENG,2012,Wigan Athletic,team,15,38,11,10,17,42,62,-20,43,1.13,18634,Franco Di Santo - 7,Ali Al-Habsi,
+Premier League,M,ENG,2012,Wolves,team,20,38,5,10,23,40,82,-42,25,0.66,25677,Steven Fletcher - 12,Wayne Hennessey,Relegated
