@@ -4,7 +4,7 @@
 # Date: 12 April 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: Uncomment line number and run it once to install `worldfootballR`.
+# Pre-requisites: Uncomment line number 12 and run it once to install `worldfootballR`.
 # Any other information needed? The loop takes some time to run, so please wait for some time after running this file.
 
 #### Workspace setup ####

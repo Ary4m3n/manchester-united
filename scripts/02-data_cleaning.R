@@ -1,44 +1,77 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleans the raw data from 2004-2023 for the English Premier League
+# Author: Aryaman Sharma
+# Date: 12 April 2024
+# Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: Run 01-download_data before running this file.
+# Any other information needed?
 
 #### Workspace setup ####
 library(tidyverse)
+library(janitor)
+library(dplyr)
+library(arrow)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+final_data_2013 <- list()
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
-
+for (year in 2004:2013) {
+  league_table_file_name <- paste0("data/raw_data/league_table_stats_", year, ".csv")
+  
+  temp_league_table_stats <- read_csv(league_table_file_name, show_col_types = FALSE)
+  
+  selected_temp_league_table_stats <- temp_league_table_stats |> 
+    filter(Squad == "Manchester Utd") |>
+    select(Season_End_Year, Rk, W, D, L, GF, GA, GD, Pts) |>
+    mutate(W_Ratio = ((W) / (W + D + L)) * 100) |>
+    select(Season_End_Year, Rk, W, D, L, W_Ratio, GF, GA, GD, Pts) |>
+    rename(
+      Year = Season_End_Year,
+      Rank = Rk,
+      Wins = W,
+      Draws = D,
+      Losses = L,
+      `Win Ratio` = W_Ratio,
+      `Goals Scored` = GF,
+      `Goals Conceded` = GA,
+      `Goal Difference` = GD,
+      `League Points` = Pts
+    )
+  final_data_2013[[as.character(year)]] <- selected_temp_league_table_stats
+}
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+final_data_2013 <- bind_rows(final_data_2013)
+write_parquet(final_data_2013, "data/analysis_data/analysis_data2013.parquet")
+
+
+final_data_2023 <- list()
+
+for (year in 2014:2023) {
+  league_table_file_name <- paste0("data/raw_data/league_table_stats_", year, ".csv")
+  
+  temp_league_table_stats <- read_csv(league_table_file_name, show_col_types = FALSE)
+  
+  selected_temp_league_table_stats <- temp_league_table_stats |> 
+    filter(Squad == "Manchester Utd") |>
+    select(Season_End_Year, Rk, W, D, L, GF, GA, GD, Pts) |>
+    mutate(W_Ratio = ((W) / (W + D + L)) * 100) |>
+    select(Season_End_Year, Rk, W, D, L, W_Ratio, GF, GA, GD, Pts) |>
+    rename(
+      Year = Season_End_Year,
+      Rank = Rk,
+      Wins = W,
+      Draws = D,
+      Losses = L,
+      `Win Ratio` = W_Ratio,
+      `Goals Scored` = GF,
+      `Goals Conceded` = GA,
+      `Goal Difference` = GD,
+      `League Points` = Pts
+    )
+  
+  final_data_2023[[as.character(year)]] <- selected_temp_league_table_stats
+}
+#### Save data ####
+final_data_2023 <- bind_rows(final_data_2023)
+write_parquet(final_data_2023, "data/analysis_data/analysis_data2023.parquet")
