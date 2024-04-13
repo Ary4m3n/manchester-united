@@ -1,14 +1,17 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Sir Alex Ferguson's Continued Tenure Could Have Sustained Manchester United's EPL Dominance"
+subtitle: "An Analysis of an Increase in League Points"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Aryaman Sharma
+thanks: "Code and data are available at: https://github.com/Ary4m3n/manchester-united.git"
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
-format: pdf
+format: 
+  pdf:
+    tbl-pos: "h"
+    fig-pos: "h"
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -25,56 +28,60 @@ library(palmerpenguins)
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+Manchester United, an English football (soccer) team based in Manchester, England, has been one of the richest, most renowned and most supported clubs in the whole world. Founded in 1878, Manchester United is know for its note-worthy history in football. Manchester United's distinct history has been dominated by two long-serving managers, Sir Matthew Busby and Sir Alex Ferguson [@citeManUtdBrit]. Sir Matthew Busby was the manager of Manchester United between 1945 and 1969, where he was most known for rebuilding the team after 23 of 44 players died after a plane crash in Munich in 1958.
 
-The remainder of this paper is structured as follows. @sec-data....
+Sir Alex Ferguson managed the club between 1986 and 2013 where he led the team to an unparalleled spell of dominance in the English Premier League [@citeManUtdBrit]. The English Premier League (EPL) since the 1992-1993 season has been the top-tier league in the English football league system [@citePL]. Under Sir Alex Ferguson, Manchester United won 12 Premier League titles between 1992 and 2013, and dominated the rest of the 19 teams in the league. Sir Alex Ferguson is also well renowned to have nurtured the young talent in Cristiano Ronaldo, arguably now deemed to be one of the greatest players of all time.
 
+Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013. 
 
+The aim of this paper is two-folded, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute positively to the debate about him being the greatest manager of all time.
+
+The structure of this paper comprises four sections: Data, Model, Results and Discussion. In the Data section (@sec-data), we discuss the data source and the process of measuring and cleaning the datasets. In the Model section (@sec-model), we discuss the two Bayesian Models used in the paper, their justifications and how it was constructed. This section will also touch on the process of predicting the league points for 2014-2023 if Sir Alex were managing the club then. In the Results section (@sec-results), we delve deeper into the trends observed. Finally, in the Discussion section (@sec-discussion), we discuss the possible factors around contributing to Sir Alex's success, along with limitations and further research.
 
 # Data {#sec-data}
 
 Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
+<!-- ```{r} -->
+<!-- #| label: fig-bills -->
+<!-- #| fig-cap: Bills of penguins -->
+<!-- #| echo: false -->
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
+<!-- ggplot(penguins, aes(x = island, fill = species)) + -->
+<!--   geom_bar(alpha = 0.8) + -->
+<!--   scale_fill_manual(values = c("darkorange","purple","cyan4"), -->
+<!--                     guide = "none") + -->
+<!--   theme_minimal() + -->
+<!--   facet_wrap(~species, ncol = 1) + -->
+<!--   coord_flip() -->
+<!-- ``` -->
 
 Talk more about it.
 
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
+<!-- ```{r} -->
+<!-- #| label: fig-planes -->
+<!-- #| fig-cap: Relationship between wing length and width -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| message: false -->
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+<!-- analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv")) -->
 
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
+<!-- analysis_data |>  -->
+<!--   ggplot(aes(x = width, y = length)) + -->
+<!--   geom_point(alpha = 0.8) + -->
+<!--   theme_minimal() + -->
+<!--   labs(x = "Wing width (mm)", -->
+<!--        y = "Wing length (mm)") -->
+<!-- ``` -->
 
 Talk way more about it. 
 
 
 
-# Model
+# Model {#sec-model}
 
 The goal of our modelling strategy is twofold. Firstly,...
 
@@ -103,42 +110,42 @@ We expect a positive relationship between the size of the wings and time spent a
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
+<!-- # ```{r} -->
+<!-- # #| echo: false -->
+<!-- # #| eval: true -->
+<!-- # #| warning: false -->
+<!-- # #| message: false -->
+<!-- #  -->
+<!-- # library(rstanarm) -->
+<!-- #  -->
+<!-- # first_model <- -->
+<!-- #   readRDS(file = here::here("models/first_model.rds")) -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # ```{r} -->
+<!-- # #| echo: false -->
+<!-- # #| eval: true -->
+<!-- # #| label: tbl-modelresults -->
+<!-- # #| tbl-cap: "Explanatory models of flight time based on wing width and wing length" -->
+<!-- # #| warning: false -->
+<!-- #  -->
+<!-- # modelsummary::modelsummary( -->
+<!-- #   list( -->
+<!-- #     "First model" = first_model -->
+<!-- #   ), -->
+<!-- #   statistic = "mad", -->
+<!-- #   fmt = 2 -->
+<!-- # ) -->
+<!-- # ``` -->
 
 
-# Discussion
+
+
+# Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
@@ -169,26 +176,26 @@ In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. 
 
 In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
 
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
+<!-- ```{r} -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| message: false -->
+<!-- #| warning: false -->
+<!-- #| label: fig-ppcheckandposteriorvsprior -->
+<!-- #| layout-ncol: 2 -->
+<!-- #| fig-cap: "Examining how the model fits, and is affected by, the data" -->
+<!-- #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"] -->
 
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
+<!-- pp_check(first_model) + -->
+<!--   theme_classic() + -->
+<!--   theme(legend.position = "bottom") -->
 
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
+<!-- posterior_vs_prior(first_model) + -->
+<!--   theme_minimal() + -->
+<!--   scale_color_brewer(palette = "Set1") + -->
+<!--   theme(legend.position = "bottom") + -->
+<!--   coord_flip() -->
+<!-- ``` -->
 
 ## Diagnostics
 
@@ -196,20 +203,20 @@ posterior_vs_prior(first_model) +
 
 @fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
 
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| eval: true -->
+<!-- #| message: false -->
+<!-- #| warning: false -->
+<!-- #| label: fig-stanareyouokay -->
+<!-- #| fig-cap: "Checking the convergence of the MCMC algorithm" -->
+<!-- #| fig-subcap: ["Trace plot", "Rhat plot"] -->
+<!-- #| layout-ncol: 2 -->
 
-plot(first_model, "trace")
+<!-- plot(first_model, "trace") -->
 
-plot(first_model, "rhat")
-```
+<!-- plot(first_model, "rhat") -->
+<!-- ``` -->
 
 
 
