@@ -22,9 +22,9 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
+library(knitr)
+library(arrow)
 ```
-
 
 # Introduction
 
@@ -32,7 +32,7 @@ Manchester United, an English football (soccer) team based in Manchester, Englan
 
 Sir Alex Ferguson managed the club between 1986 and 2013 where he led the team to an unparalleled spell of dominance in the English Premier League [@citeManUtdBrit]. The English Premier League (EPL) since the 1992-1993 season has been the top-tier league in the English football league system [@citePL]. Under Sir Alex Ferguson, Manchester United won 12 Premier League titles between 1992 and 2013, and dominated the rest of the 19 teams in the league. Sir Alex Ferguson is also well renowned to have nurtured the young talent in Cristiano Ronaldo, arguably now deemed to be one of the greatest players of all time.
 
-Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013. 
+Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013, whereas they won 13 titles when under Sir Alex.
 
 The aim of this paper is two-folded, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute positively to the debate about him being the greatest manager of all time.
 
@@ -40,46 +40,61 @@ The structure of this paper comprises four sections: Data, Model, Results and Di
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+The datasets under examination in this paper were obtained from the R package and API `worldfootballR` [@citeWorldfootballR]. Employing the open-source `R` programming language [@citeR], we conducted the cleaning and analysis procedures, leveraging several R libraries and packages such as `tidyverse` [@citeTidyverse], `janitor` [@citeJanitor], `ggplot2` [@citeGgplot], `knitr` [@citeKnitr], `readr` [@citeReadr], `dplyr` [@citeDplyr] and `arrow` [@citeArrow]. We used `rstanarm` [@rstanarm] for the models and `modelsummary` [@citeModelsummary] for the model summary.
 
-<!-- ```{r} -->
-<!-- #| label: fig-bills -->
-<!-- #| fig-cap: Bills of penguins -->
-<!-- #| echo: false -->
+As mentioned above, in terms of estimand, the primary focus of this analysis is to assess the impact on league points Sir Alex would have had if he had been the manager between 2014 and 2023 as well. The three key predictors include the Success Rate per season (also interpreted as the Win Ratio or Win Percentage), the total goals scored and the goal difference (i.e. goals conceded deducted from goals scored). These will be talked more in detail about further into the paper.
 
-<!-- ggplot(penguins, aes(x = island, fill = species)) + -->
-<!--   geom_bar(alpha = 0.8) + -->
-<!--   scale_fill_manual(values = c("darkorange","purple","cyan4"), -->
-<!--                     guide = "none") + -->
-<!--   theme_minimal() + -->
-<!--   facet_wrap(~species, ncol = 1) + -->
-<!--   coord_flip() -->
-<!-- ``` -->
+In (@sec-data-raw) we provide an overview of the raw data obtained, (@sec-data-clean) delves deeper into the intricacies of the data cleaning process and (@sec-data-measurement) outlines the measurement aspects for the paper.
 
-Talk more about it.
+## Raw Data {#sec-data-raw}
 
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+As mentioned above, the raw data for this paper was collected from the R package and API `worldfootballR` [@citeWorldfootballR]. Team statistics per season for the English Premier League were obtained from the package. We obtained data per season, that implies that there were 20 files of raw data for 20 seasons we wish to analyze for 20 different teams in league each season. The dataset contained a lot of statistics that were not all relevant to us. Relevant statistics included the Squad Name, the finishing Rank, the number of Wins, Draws, Losses, Goals For, Goals Against, Goal Difference and the League Points. Other statistics included the Average Attendance per season, Expected Goals etc. 
 
-<!-- ```{r} -->
-<!-- #| label: fig-planes -->
-<!-- #| fig-cap: Relationship between wing length and width -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| message: false -->
+The next section (@sec-data-clean) will show the data cleaning process, further outlining the structure of the refined dataset employed in our analysis. 
 
-<!-- analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv")) -->
+## Cleaned Data {#sec-data-clean}
 
-<!-- analysis_data |>  -->
-<!--   ggplot(aes(x = width, y = length)) + -->
-<!--   geom_point(alpha = 0.8) + -->
-<!--   theme_minimal() + -->
-<!--   labs(x = "Wing width (mm)", -->
-<!--        y = "Wing length (mm)") -->
-<!-- ``` -->
+The indicators or statistics mentioned in (@sec-data-raw) were extracted from each raw data file and combined together to form two data tables for seasons between 2004-2013 and 2014-2023. @tbl-cleaned-sir-alex shows the cleaned data table for the seasons between 2004 and 2013 under Sir Alex. @tbl-cleaned-after-alex in the appendix shows the cleaned data table for the seasons between 2014 and 2023 for reference.
 
-Talk way more about it. 
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-cleaned-sir-alex
+#| tbl-cap: "Cleaned Data showing Premier League statistics for Manchester United (2004-2013)"
+#| warning: false
 
+final_data_2013 <- read_parquet("../data/analysis_data/analysis_data2013.parquet", show_col_types = FALSE)
 
+final_data_2013 <- final_data_2013 |>
+  mutate_if(is.double, round, digits = 2)
+
+kable(final_data_2013)
+```
+
+There are 10 columns in total in the League Statistics data table:
+
+1. The `Year` column refers to the Premier League season. Generally, a season starts in August and ends in May of the next year. Hence, seasons are generally represented as, for instance, 2003-2004. However, here for simplicity, the `Year` column refers to the year the season ends. So, the season 2003-2004 will be represented as 2004.
+2. The `Rank` column points to the position Manchester United finished in, in the particular season. The Rank is going to between 1 and 20 because there are 20 teams in the league each year.
+3. The `Wins` column contains the total number of wins by Manchester United in the particular season. There can be at maximum 38 wins because there are 38 games in total.
+4. The `Draws` column contains the total number of draws by Manchester United in the particular season. There can be at maximum 38 draws because there are 38 games in total.
+5. The `Losses` column contains the total number of losses by Manchester United in the particular season. There can be at maximum 38 losses because there are 38 games in total. Additionally, in total there are going to be 38 wins, draws and losses.
+6. The `Win Percentage (%)` column, also referred to as the *Success Percentage* is calculated as the total number of wins divided by the total number of games, i.e. 38. It is shown as a percentage for simplicity of understanding. It is understood that higher the Win Percentage, the better the season was, and the better the league points will be.
+7. The `Goals Scored` column outlines the number of goals scored by the team in the particular season. It is understood that this measure is a good indicator of how well the offense played in a particular season. The higher the goals scored, the better the offense played.
+8. The `Goals Conceded` column outlines the number of goals conceded by the team in the particular season. It is understood that this measure is a good indicator of how well the defense played in a particular season. The lower the goals conceded, the better the defense played.
+9. The `Goal Difference` column outlines the difference between the number of goals scored and goals conceded. It is understood that this measure is a good indicator of how well the team played as a whole. This value can be negative as well, implying that the team did bad in the season. 
+10. The `League Points` column indicates to the total number of points scored that season. This indicator is essential in determining where the teams end up in the league. A team receives 3 points for a win, 1 point for a draw and 0 points for a loss.
+
+We will be using the *Win* or *Success Percentage*, *Goals Scored* and *Goal Difference* as our predictors to model for the *League Points* ahead, which will be explained in detail in (@sec-model). Now, in (@sec-data-measurement), we will delve into the measurement aspects of the data presented in the tables shown. Understanding this process is crucial for drawing meaningful insights from the data analysis results.
+
+## Measurement {#sec-data-measurement}
+
+According to the Premier League [@citePLstats], all the official performance data is collected and reported by Opta, a part of Stats Perform [@citeStatsperform]. All the data is collected by a team of three people which cover each match. These three people include two highly trained analysts who go through video-based collection system to gather data, and a quality control analyst who can rewind the video feed frame-by-frame to make sure the data collected is correct [@citePLstats]. Additionally, the data collected is then subject to an exhaustive post-match check to ensure accuracy. This comprehensive process ensures that the data collected is complete and highly accurate. As the data analyzed in this paper is *not* collected and reported by the teams themselves, it is highly unlikely that a collection bias would exist. However, some might argue that some teams might be able to pressure the officials into tipping the statistics over in their favor, but this might be highly unlikely as well.
+
+The `Win Percentage` or also referred to as the `Success Percentage` was calculated manually by taking taking a ratio of the wins in a season and the total number of games in a season (i.e. 38). As mentioned above, as the wins were reported by Opta [@citePLstats] and not by individual teams, hence once again the issues about any biases caused can be avoided. 
+
+There might be a concern when considering the fact that this paper analyses data for the past 20 years. There might have been a difference in data reporting back in 2004 when compared to right now. It is essential to note that, this difference would have a bigger impact on data for a minute to minute match data analysis. However, in this report we use data about each season. As this data includes most the number of points scored, wins, draws, losses and goals, we work under the assumption that this data should not be affected to a large extent. However, at the same time it is important to still acknowledge that data collection in the past could have impacted the data being analyzed and modeled with.
+
+In (@sec-model) we will describe the models used in this paper and provide with justification and hypothesis of what we expect from the models.
 
 # Model {#sec-model}
 
@@ -89,8 +104,9 @@ Here we briefly describe the Bayesian analysis model used to investigate... Back
 
 ## Model set-up
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
+Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.
 
+```{=tex}
 \begin{align} 
 y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
 \mu_i &= \alpha + \beta_i + \gamma_i\\
@@ -99,9 +115,8 @@ y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
 \gamma &\sim \mbox{Normal}(0, 2.5) \\
 \sigma &\sim \mbox{Exponential}(1)
 \end{align}
-
+```
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
 
 ### Model justification
 
@@ -109,47 +124,69 @@ We expect a positive relationship between the size of the wings and time spent a
 
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
-
 # Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
 <!-- # ```{r} -->
+
 <!-- # #| echo: false -->
+
 <!-- # #| eval: true -->
+
 <!-- # #| warning: false -->
+
 <!-- # #| message: false -->
+
 <!-- #  -->
+
 <!-- # library(rstanarm) -->
+
 <!-- #  -->
+
 <!-- # first_model <- -->
+
 <!-- #   readRDS(file = here::here("models/first_model.rds")) -->
+
 <!-- # ``` -->
+
 <!-- #  -->
+
 <!-- # ```{r} -->
+
 <!-- # #| echo: false -->
+
 <!-- # #| eval: true -->
+
 <!-- # #| label: tbl-modelresults -->
+
 <!-- # #| tbl-cap: "Explanatory models of flight time based on wing width and wing length" -->
+
 <!-- # #| warning: false -->
+
 <!-- #  -->
+
 <!-- # modelsummary::modelsummary( -->
+
 <!-- #   list( -->
+
 <!-- #     "First model" = first_model -->
+
 <!-- #   ), -->
+
 <!-- #   statistic = "mad", -->
+
 <!-- #   fmt = 2 -->
+
 <!-- # ) -->
+
 <!-- # ``` -->
-
-
-
 
 # Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Second discussion point
 
@@ -163,10 +200,23 @@ Weaknesses and next steps should also be included.
 
 \appendix
 
-# Appendix {-}
-
+# Appendix {.unnumbered}
 
 # Additional data details
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-cleaned-after-alex
+#| tbl-cap: "Cleaned Data showing Premier League statistics for Manchester United (2014-2023)"
+#| warning: false
+
+final_data_2023 <- read_parquet("../data/analysis_data/analysis_data2023.parquet", show_col_types = FALSE)
+
+final_data_2023 <- final_data_2023 |>
+  mutate_if(is.double, round, digits = 2)
+
+kable(final_data_2023)
+```
 
 # Model details {#sec-model-details}
 
@@ -174,27 +224,42 @@ Weaknesses and next steps should also be included.
 
 In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
+In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows...
 
 <!-- ```{r} -->
+
 <!-- #| eval: true -->
+
 <!-- #| echo: false -->
+
 <!-- #| message: false -->
+
 <!-- #| warning: false -->
+
 <!-- #| label: fig-ppcheckandposteriorvsprior -->
+
 <!-- #| layout-ncol: 2 -->
+
 <!-- #| fig-cap: "Examining how the model fits, and is affected by, the data" -->
+
 <!-- #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"] -->
 
 <!-- pp_check(first_model) + -->
+
 <!--   theme_classic() + -->
+
 <!--   theme(legend.position = "bottom") -->
 
 <!-- posterior_vs_prior(first_model) + -->
+
 <!--   theme_minimal() + -->
+
 <!--   scale_color_brewer(palette = "Set1") + -->
+
 <!--   theme(legend.position = "bottom") + -->
+
 <!--   coord_flip() -->
+
 <!-- ``` -->
 
 ## Diagnostics
@@ -204,25 +269,29 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 @fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
 
 <!-- ```{r} -->
+
 <!-- #| echo: false -->
+
 <!-- #| eval: true -->
+
 <!-- #| message: false -->
+
 <!-- #| warning: false -->
+
 <!-- #| label: fig-stanareyouokay -->
+
 <!-- #| fig-cap: "Checking the convergence of the MCMC algorithm" -->
+
 <!-- #| fig-subcap: ["Trace plot", "Rhat plot"] -->
+
 <!-- #| layout-ncol: 2 -->
 
 <!-- plot(first_model, "trace") -->
 
 <!-- plot(first_model, "rhat") -->
+
 <!-- ``` -->
-
-
 
 \newpage
 
-
 # References
-
-
