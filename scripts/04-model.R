@@ -20,7 +20,7 @@ analysis_data2013 <- read_parquet("data/analysis_data/analysis_data2013.parquet"
 
 ### Model data ####
 first_model <- stan_glm(
-  formula = `League Points` ~ `Win Ratio` + `Goals Scored` + `Goal Difference`,
+  formula = `League Points` ~ `Win Percentage (%)` + `Goals Scored` + `Goal Difference`,
   data = analysis_data2013,
   family = gaussian(),
   prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
@@ -39,7 +39,7 @@ analysis_data2023 <- read_parquet("data/analysis_data/analysis_data2023.parquet"
 
 ### Model data ####
 second_model <- stan_glm(
-  formula = `League Points` ~ `Win Ratio` + `Goals Scored` + `Goal Difference`,
+  formula = `League Points` ~ `Win Percentage (%)` + `Goals Scored` + `Goal Difference`,
   data = analysis_data2023,
   family = gaussian(),
   prior = normal(location = 0, scale = 2.5, autoscale = TRUE),

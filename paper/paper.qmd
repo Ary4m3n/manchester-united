@@ -6,7 +6,7 @@ author:
 thanks: "Code and data are available at: https://github.com/Ary4m3n/manchester-united.git"
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This study investigates the unexpected surge in death rates during the COVID-19 pandemic in Russia, a country considered well-prepared according to the Global Health Security (GHS) Index. Building upon Nuzzo and Ledesma's work, we analyze the impact of COVID-19 in Russia, incorporating factors such as the GHS Index and excess death rates. Our findings reveal a substantial increase in excess death rates in Russia, diverging from the lower rates observed in nations deemed well-prepared. This research contributes to our understanding of the repercussions of the COVID-19 outbreak in Russia, highlighting areas for improvement in prepared countries to mitigate the effects of future pandemics."
 format: 
   pdf:
     tbl-pos: "h"
@@ -24,6 +24,8 @@ bibliography: references.bib
 library(tidyverse)
 library(knitr)
 library(arrow)
+library(rstanarm)
+library(ggplot2)
 ```
 
 # Introduction
@@ -34,7 +36,7 @@ Sir Alex Ferguson managed the club between 1986 and 2013 where he led the team t
 
 Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013, whereas they won 13 titles when under Sir Alex.
 
-The aim of this paper is two-folded, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute positively to the debate about him being the greatest manager of all time.
+The aim of this paper is twofold, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute positively to the debate about him being the greatest manager of all time.
 
 The structure of this paper comprises four sections: Data, Model, Results and Discussion. In the Data section (@sec-data), we discuss the data source and the process of measuring and cleaning the datasets. In the Model section (@sec-model), we discuss the two Bayesian Models used in the paper, their justifications and how it was constructed. This section will also touch on the process of predicting the league points for 2014-2023 if Sir Alex were managing the club then. In the Results section (@sec-results), we delve deeper into the trends observed. Finally, in the Discussion section (@sec-discussion), we discuss the possible factors around contributing to Sir Alex's success, along with limitations and further research.
 
@@ -63,12 +65,13 @@ The indicators or statistics mentioned in (@sec-data-raw) were extracted from ea
 #| tbl-cap: "Cleaned Data showing Premier League statistics for Manchester United (2004-2013)"
 #| warning: false
 
-final_data_2013 <- read_parquet("../data/analysis_data/analysis_data2013.parquet", show_col_types = FALSE)
+analysis_data2013 <- read_parquet("../data/analysis_data/analysis_data2013.parquet", show_col_types = FALSE)
+analysis_data2023 <- read_parquet("../data/analysis_data/analysis_data2023.parquet", show_col_types = FALSE)
 
-final_data_2013 <- final_data_2013 |>
+analysis_data2013 <- analysis_data2013 |>
   mutate_if(is.double, round, digits = 2)
 
-kable(final_data_2013)
+kable(analysis_data2013)
 ```
 
 There are 10 columns in total in the League Statistics data table:
@@ -96,59 +99,158 @@ There might be a concern when considering the fact that this paper analyses data
 
 In (@sec-model) we will describe the models used in this paper and provide with justification and hypothesis of what we expect from the models.
 
+\newpage
+
 # Model {#sec-model}
 
-The goal of our modelling strategy is twofold. Firstly,...
+The goal of our modelling strategy is twofold. Firstly, we want to analyze to what effect the *Win* or *Success Percentage*, *Goals Scored* and *Goal Difference* have on the end-of-season league points during two different time periods, i.e. 2004-2013 and 2014-2023. Secondly, we want to use these results to predict the end-of-season league points for if Sir Alex would have continued his managership after 2013 to between 2014 and 2023. In this paper, we will make 2 models, one for modelling Sir Alex's final 10 years of his career at Manchester United in the English Premier League, and the one for modelling the next 10 years at Manchester United which saw a total of 8 different managers. We study two models in this paper so that we can effectively compare how Sir Alex fared when compared to 8 other managers at running Manchester United.
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+Here we briefly describe the Bayesian analysis model used to investigate and study the multiple linear regression model of end-of-season league points for two time periods, 2004-2013 and 2014-2023. Background details and diagnostics are included in [Appendix -@sec-model-details].
 
 ## Model set-up
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.
+Define $y_i$ as the end-of-season league points obtained by Manchester United. Then $\beta_i$ is the win or success percentage for the season, $\gamma_i$ is the number of goals scored in the season, and $\delta_i$ is the goal difference for the season.
 
 ```{=tex}
 \begin{align} 
 y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
+\mu_i &= \alpha + \beta_i + \gamma_i + \delta_i\\
 \alpha &\sim \mbox{Normal}(0, 2.5) \\
 \beta &\sim \mbox{Normal}(0, 2.5) \\
 \gamma &\sim \mbox{Normal}(0, 2.5) \\
+\delta &\sim \mbox{Normal}(0, 2.5) \\
 \sigma &\sim \mbox{Exponential}(1)
 \end{align}
 ```
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+We run the model in R [@citeR] using the `rstanarm` package of [@rstanarm]. We use the default priors from `rstanarm`.
 
 ### Model justification
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+We expect a positive relationship between the end-of-season league points and the win percentage, the goals scored and the total goal difference per season. As we are modelling for the end-of-season league points, we found the predictors of the win percentage, the total goals scored in a season and the total goal difference per season to be appropriate. The win or success percentage communicates to us how *successful* the club was that season. As mentioned above, we calculate this indicator by taking a ratio of the wins with the total number of games. We expect that as the win percentage goes up, so should the league points.
 
-We can use maths by including latex between dollar signs, for instance $\theta$.
+The total goals in a season illustrates to us how well the offense of the team performed and how successful they were at scoring goals. We expect that a higher season goal scored count should imply a higher amount of league points. Wins and losses in the league are highly dependent on the goal difference. A team gets a win by simply scoring more goals than their opponent. The goal difference is an essential indicator which helps us model for the total end-of-season league points. We expect that a higher and positive goal difference will result in higher total league points. It is important to note that the goal difference can be a negative value as well, where in for that season the goals conceded would be great than the goals scored (we can infer a lot about how the league points should be).
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults.
+The results section divided into two parts. @sec-results1 outlines the comparison between predictors such as *Win* or *Success Percentage*, *Goals Scored* and *Goal Difference* for the two eras under study: Sir Alex Ferguson's (between 2004 and 2013) and the other 8 managers' (between 2014-2023). As a prelude to studying the results of the model, this will allow us to visualize the differences in performance between both the eras. @sec-results2 communicates the model summary, predicts how Sir Alex would have fared in the years 2014-2023, and discusses a comparison between the increase in league points scored over the subsequent years when compared with the other 8 managers.
 
-<!-- # ```{r} -->
+## Comparison of Predictors: Ferguson's Era vs. Subsequent Periods {#sec-results1}
 
-<!-- # #| echo: false -->
+@fig-winpercentage shows us a side-by-side comparison of the Win or Success Percentage for when Manchester United was managed by Sir Alex Ferguson (@fig-winpercentage-1) and when it was managed by the subsequent 8 managers (@fig-winpercentage-2). We can clearly see in @fig-winpercentage-1 that the Win Percentage ranges from 60%-75% approximately, whereas, on the other hand in @fig-winpercentage-2, the Win Percentage ranges from 40%-65% approximately. There is a very clear difference observed between performances in each of these eras. Remarkably, during Sir Alex's era (2004-2013), the win percentage was above 70% for 6 out of 10 years. On the other hand, during the subsequent era (2014-2023), the win percentage was below or equal to 55% for 8 out of 10 years. It is believed that this indicator has a direct impact on the league points scored for that season. From @fig-winpercentage, we can certainly infer a more successful managership by Sir Alex. 
 
-<!-- # #| eval: true -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-winpercentage
+#| layout-ncol: 2
+#| fig-cap: "Comparing the Win Percentage (%) for eras between 2004-2013 and 2014-2023"
+#| fig-subcap: ["Win Percentage (%) Under Sir Alex (2004-2013)", "Win Percentage (%) Under Subsequent 8 Managers (2014-2023)"]
 
-<!-- # #| warning: false -->
+ggplot(analysis_data2013, aes(x = Year, y = `Win Percentage (%)`)) +
+  geom_bar(stat = "identity", fill = "brown3") +
+  labs(title = "Win Percentage (%) Comparison for 2004-2013", x = "Year", y = "Win Percentage (%)") +
+  scale_x_continuous(breaks = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1),
+                     labels = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) + 
+  theme_minimal()
 
-<!-- # #| message: false -->
+ggplot(analysis_data2023, aes(x = Year, y = `Win Percentage (%)`)) +
+  geom_bar(stat = "identity", fill = "cadetblue") +
+  labs(title = "Win Percentage (%) Comparison for 2014-2023", x = "Year", y = "Win Percentage (%)") +
+  scale_x_continuous(breaks = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1),
+                     labels = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) + 
+  theme_minimal()
+```
 
-<!-- #  -->
+@fig-goals-scored shows us a side-by-side comparison of the Goals Scored for when Manchester United was managed by Sir Alex Ferguson (@fig-goals-scored-1) and when it was managed by the subsequent 8 managers (@fig-goals-scored-2). We observe that for Sir Alex's era the goals scored range from 60-90 goals, most of which are above 80 goals. On the other hand, for the subsequent period of time, the goals scored are lesser than 65 in approximately 8 out of 10 years. This general gap of 15 goals on average tells us how the offense was much better during Sir Alex's era. As mentioned in @sec-model, we expect a positive relationship between the goals scored and the league points which will be explored in @sec-results2.
 
-<!-- # library(rstanarm) -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-goals-scored
+#| layout-ncol: 2
+#| fig-cap: "Comparing the Goals Scored for eras between 2004-2013 and 2014-2023"
+#| fig-subcap: ["Goals Scored Under Sir Alex (2004-2013)", "Goals Scored Under Subsequent 8 Managers (2014-2023)"]
 
-<!-- #  -->
+ggplot(analysis_data2013, aes(x = Year, y = `Goals Scored`)) +
+  geom_bar(stat = "identity", fill = "brown3") +
+  labs(title = "Goals Scored Comparison for 2004-2013", x = "Year", y = "Goals Scored") +
+  scale_x_continuous(breaks = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1),
+                     labels = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) +
+  theme_minimal()
 
-<!-- # first_model <- -->
+ggplot(analysis_data2023, aes(x = Year, y = `Goals Scored`)) +
+  geom_bar(stat = "identity", fill = "cadetblue") +
+  labs(title = "Goals Scored Comparison for 2014-2023", x = "Year", y = "Goals Scored") +
+  scale_x_continuous(breaks = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1),
+                     labels = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) +
+  theme_minimal()
+```
 
-<!-- #   readRDS(file = here::here("models/first_model.rds")) -->
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis gravida in felis sit amet porta. Cras eros nulla, malesuada eget molestie auctor, vestibulum et risus. Vestibulum et enim ac velit tempus consectetur. Mauris ullamcorper erat vitae nunc porta, vel egestas quam viverra. Vivamus at venenatis arcu, vel congue sem. Nulla facilisi. Fusce quis diam eros. Duis in turpis in lectus bibendum pharetra. Proin dapibus tellus sed enim pellentesque tincidunt. Morbi tempor iaculis lorem ac efficitur. Pellentesque lacus nulla, tempor id magna vel, ornare venenatis ante. Fusce blandit est mauris, at ullamcorper massa tincidunt id. In vulputate odio ut pretium varius. Cras pharetra diam lorem, in auctor nulla consequat eget.
 
-<!-- # ``` -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-goal-difference
+#| layout-ncol: 2
+#| fig-cap: "Comparing the Goal Difference for eras between 2004-2013 and 2014-2023"
+#| fig-subcap: ["Goal Difference Under Sir Alex (2004-2013)", "Goal Difference Under Subsequent 8 Managers (2014-2023)"]
+
+ggplot(analysis_data2013, aes(x = Year, y = `Goal Difference`)) +
+  geom_bar(stat = "identity", fill = "brown3") +
+  labs(title = "Goal Difference Comparison for 2004-2013", x = "Year", y = "Goal Difference") +
+  scale_x_continuous(breaks = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1),
+                     labels = seq(min(analysis_data2013$Year), max(analysis_data2013$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) +
+  theme_minimal()
+
+ggplot(analysis_data2023, aes(x = Year, y = `Goal Difference`)) +
+  geom_bar(stat = "identity", fill = "cadetblue") +
+  labs(title = "Goal Difference Comparison for 2014-2023", x = "Year", y = "Goal Difference") +
+  scale_x_continuous(breaks = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1),
+                     labels = seq(min(analysis_data2023$Year), max(analysis_data2023$Year), by = 1)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10),
+                     labels = seq(0, 100, by = 10),
+                     limits = c(0, 100)) +
+  theme_minimal()
+```
+
+## Predicting League Points Under Extended Ferguson Era {#sec-results2}
+
+
+<!-- Our results are summarized in @tbl-modelresults. -->
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+
+first_model <-
+  readRDS(file = here::here("models/first_model.rds"))
+second_model <-
+  readRDS(file = here::here("models/second_model.rds"))
+```
 
 <!-- #  -->
 
@@ -210,87 +312,98 @@ Weaknesses and next steps should also be included.
 #| tbl-cap: "Cleaned Data showing Premier League statistics for Manchester United (2014-2023)"
 #| warning: false
 
-final_data_2023 <- read_parquet("../data/analysis_data/analysis_data2023.parquet", show_col_types = FALSE)
-
-final_data_2023 <- final_data_2023 |>
+analysis_data2023 <- analysis_data2023 |>
   mutate_if(is.double, round, digits = 2)
 
-kable(final_data_2023)
+kable(analysis_data2023)
 ```
+
+\newpage
 
 # Model details {#sec-model-details}
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
+In @fig-ppcheckandposteriorvsprior-1 and @fig-ppcheckandposteriorvsprior2-1 we implement a posterior predictive check for the first model for the era 2004-2013 and the second model for the era 2014-2023 respectively. This compares the actual outcome variable, i.e. *end-of-season league points* with simulations from the posterior distribution. We can see that as the posterior is able to simulate the data, the model does a good job of fitting the data.
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows...
+In @fig-ppcheckandposteriorvsprior-2 and @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior for the first model for era 2004-2013 and the second model for the era 2014-2023 respectively. We do this to see how much the estimates change once data is taken into account. 
 
-<!-- ```{r} -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-ppcheckandposteriorvsprior
+#| layout-ncol: 2
+#| fig-cap: "Examining how the model fits, and is affected by, the data (2004-2013)"
+#| fig-subcap: ["Posterior prediction check (2004-2013)", "Comparing the posterior with the prior(2004-2013)"]
 
-<!-- #| eval: true -->
+pp_check(first_model) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+posterior_vs_prior(first_model) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom") +
+  coord_flip()
+```
 
-<!-- #| echo: false -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-ppcheckandposteriorvsprior2
+#| layout-ncol: 2
+#| fig-cap: "Examining how the model fits, and is affected by, the data (2014-2023)"
+#| fig-subcap: ["Posterior prediction check (2014-2023)", "Comparing the posterior with the prior(2014-2023)"]
 
-<!-- #| message: false -->
+pp_check(second_model) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+posterior_vs_prior(second_model) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "bottom") +
+  coord_flip()
+```
 
-<!-- #| warning: false -->
-
-<!-- #| label: fig-ppcheckandposteriorvsprior -->
-
-<!-- #| layout-ncol: 2 -->
-
-<!-- #| fig-cap: "Examining how the model fits, and is affected by, the data" -->
-
-<!-- #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"] -->
-
-<!-- pp_check(first_model) + -->
-
-<!--   theme_classic() + -->
-
-<!--   theme(legend.position = "bottom") -->
-
-<!-- posterior_vs_prior(first_model) + -->
-
-<!--   theme_minimal() + -->
-
-<!--   scale_color_brewer(palette = "Set1") + -->
-
-<!--   theme(legend.position = "bottom") + -->
-
-<!--   coord_flip() -->
-
-<!-- ``` -->
+\newpage
 
 ## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
+@fig-trace-rhat-1 and @fig-trace-rhat2-1 are trace plots for the first model for the era 2004-2013 and the second model for the era 2014-2023 respectively. Both figures shows a nice overlap between the chains and lines that appear to bounce around, but are horizontal. This suggests that there are no alarming issues in the models.
 
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
+@fig-trace-rhat-2 and @fig-trace-rhat2-2 are Rhat plots for the first model for the era 2004-2013 and the second model for the era 2014-2023 respectively. It shows that in both figures everything is close to 1 and does not exceed 1.1. This again suggests that there are no issues with the models.
 
-<!-- ```{r} -->
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+#| warning: false
+#| label: fig-trace-rhat
+#| fig-cap: "Checking the convergence of the MCMC algorithm for 2004-2013"
+#| fig-subcap: ["Trace plot for (2004-2013 model)", "Rhat plot (2004-2013 model)"]
+#| layout-ncol: 2
 
-<!-- #| echo: false -->
+plot(first_model, "trace")
+plot(first_model, "rhat")
+```
 
-<!-- #| eval: true -->
 
-<!-- #| message: false -->
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+#| warning: false
+#| label: fig-trace-rhat2
+#| fig-cap: "Checking the convergence of the MCMC algorithm for 2014-2023"
+#| fig-subcap: ["Trace plot for (2014-2023 model)", "Rhat plot (2014-2023 model)"]
+#| layout-ncol: 2
 
-<!-- #| warning: false -->
-
-<!-- #| label: fig-stanareyouokay -->
-
-<!-- #| fig-cap: "Checking the convergence of the MCMC algorithm" -->
-
-<!-- #| fig-subcap: ["Trace plot", "Rhat plot"] -->
-
-<!-- #| layout-ncol: 2 -->
-
-<!-- plot(first_model, "trace") -->
-
-<!-- plot(first_model, "rhat") -->
-
-<!-- ``` -->
+plot(second_model, "trace")
+plot(second_model, "rhat")
+```
 
 \newpage
 
