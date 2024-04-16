@@ -19,6 +19,7 @@ The repo has been structured in a way to make it accessible to the user. The rep
 -   `data/raw_data` contains the raw data obtained from the R package `worldfootballR` after running `scripts/01-download_data.R`.
 -   `data/analysis_data` contains the cleaned data after running script `02-data_cleaning.R`.
 -   `models/first_model.rds` and `models/second_model.rds` contains the saved models after running `04-model.R`.
+-   `other/datasheet` contains the files `datasheet.pdf`, `datasheet.qmd` and `references.bib` which contain the datasheet for the datasets used in the paper.
 -   `other/llm` contains the file `usage.txt` that includes the chat with the LLM as reference.
 -   `other/sketches` contains two sketches for the datasets `datasets.pdf` and the graphs `graphs.pdf` as reference to what is to be expected in the paper.
 -   `paper` contains the files used to generate the paper, including the Quarto document, `paper.qmd`, the reference bibliography file, `references.bib` as well as the PDF of the paper, `paper.pdf`.
