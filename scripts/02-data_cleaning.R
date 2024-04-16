@@ -12,16 +12,20 @@ library(tidyverse)
 library(janitor)
 library(dplyr)
 library(arrow)
+library(styler)
 
 #### Clean data ####
+# Used to style the code
+# style_file("scripts/02-data_cleaning.R")
+
 final_data_2013 <- list()
 
 for (year in 2004:2013) {
   league_table_file_name <- paste0("data/raw_data/league_table_stats_", year, ".csv")
-  
+
   temp_league_table_stats <- read_csv(league_table_file_name, show_col_types = FALSE)
-  
-  selected_temp_league_table_stats <- temp_league_table_stats |> 
+
+  selected_temp_league_table_stats <- temp_league_table_stats |>
     filter(Squad == "Manchester Utd") |>
     select(Season_End_Year, Rk, W, D, L, GF, GA, GD, Pts) |>
     mutate(W_Ratio = ((W) / (W + D + L)) * 100) |>
@@ -49,10 +53,10 @@ final_data_2023 <- list()
 
 for (year in 2014:2023) {
   league_table_file_name <- paste0("data/raw_data/league_table_stats_", year, ".csv")
-  
+
   temp_league_table_stats <- read_csv(league_table_file_name, show_col_types = FALSE)
-  
-  selected_temp_league_table_stats <- temp_league_table_stats |> 
+
+  selected_temp_league_table_stats <- temp_league_table_stats |>
     filter(Squad == "Manchester Utd") |>
     select(Season_End_Year, Rk, W, D, L, GF, GA, GD, Pts) |>
     mutate(W_Ratio = ((W) / (W + D + L)) * 100) |>
@@ -69,7 +73,7 @@ for (year in 2014:2023) {
       `Goal Difference` = GD,
       `League Points` = Pts
     )
-  
+
   final_data_2023[[as.character(year)]] <- selected_temp_league_table_stats
 }
 #### Save data ####

@@ -1,12 +1,12 @@
 ---
-title: "Sir Alex Ferguson's Continued Tenure Could Have Sustained Manchester United's EPL Dominance"
+title: "Sir Alex Ferguson's Continued Tenure Could Have Only Marginal Improvements over Manchester United's EPL Performance"
 subtitle: "An Analysis of an Increase in League Points"
 author: 
   - Aryaman Sharma
 thanks: "Code and data are available at: https://github.com/Ary4m3n/manchester-united.git"
 date: today
 date-format: long
-abstract: "This study investigates the unexpected surge in death rates during the COVID-19 pandemic in Russia, a country considered well-prepared according to the Global Health Security (GHS) Index. Building upon Nuzzo and Ledesma's work, we analyze the impact of COVID-19 in Russia, incorporating factors such as the GHS Index and excess death rates. Our findings reveal a substantial increase in excess death rates in Russia, diverging from the lower rates observed in nations deemed well-prepared. This research contributes to our understanding of the repercussions of the COVID-19 outbreak in Russia, highlighting areas for improvement in prepared countries to mitigate the effects of future pandemics."
+abstract: "Manchester United has been a historical football club. This paper examines Manchester United's performance from 2004-2013 under Sir Alex Ferguson's golden era and compares it with the period from 2014-2023, following his retirement. Using a Bayesian analysis model, this paper attempts to predict potential league points for if Sir Alex would have continued managing (2014-2023). Results predict only a marginal improvement in club's performance. This reasearch delves into recent increase in competition and other factor as a possible explanation."
 format: 
   pdf:
     tbl-pos: "h"
@@ -36,13 +36,13 @@ Sir Alex Ferguson managed the club between 1986 and 2013 where he led the team t
 
 Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013, whereas they won 13 titles when under Sir Alex.
 
-The aim of this paper is twofold, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute positively to the debate about him being the greatest manager of all time.
+The aim of this paper is twofold, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute to the debate about the greatest manager of all time.
 
 The structure of this paper comprises four sections: Data, Model, Results and Discussion. In the Data section (@sec-data), we discuss the data source and the process of measuring and cleaning the datasets. In the Model section (@sec-model), we discuss the two Bayesian Models used in the paper, their justifications and how it was constructed. This section will also touch on the process of predicting the league points for 2014-2023 if Sir Alex were managing the club then. In the Results section (@sec-results), we delve deeper into the trends observed. Finally, in the Discussion section (@sec-discussion), we discuss the possible factors around contributing to Sir Alex's success, along with limitations and further research.
 
 # Data {#sec-data}
 
-The datasets under examination in this paper were obtained from the R package and API `worldfootballR` [@citeWorldfootballR]. Employing the open-source `R` programming language [@citeR], we conducted the cleaning and analysis procedures, leveraging several R libraries and packages such as `tidyverse` [@citeTidyverse], `janitor` [@citeJanitor], `ggplot2` [@citeGgplot], `knitr` [@citeKnitr], `readr` [@citeReadr], `dplyr` [@citeDplyr] and `arrow` [@citeArrow]. We used `rstanarm` [@rstanarm] for the models and `modelsummary` [@citeModelsummary] for the model summary.
+The datasets under examination in this paper were obtained from the R package and API `worldfootballR` [@citeWorldfootballR]. Employing the open-source `R` programming language [@citeR], we conducted the cleaning and analysis procedures, leveraging several R libraries and packages such as `tidyverse` [@citeTidyverse], `janitor` [@citeJanitor], `ggplot2` [@citeGgplot], `knitr` [@citeKnitr], `readr` [@citeReadr], `dplyr` [@citeDplyr], `styler` [@citeStyler] and `arrow` [@citeArrow]. We used `rstanarm` [@rstanarm] for the models and `modelsummary` [@citeModelsummary] for the model summary.
 
 As mentioned above, in terms of estimand, the primary focus of this analysis is to assess the impact on league points Sir Alex would have had if he had been the manager between 2014 and 2023 as well. The three key predictors include the Success Rate per season (also interpreted as the Win Ratio or Win Percentage), the total goals scored and the goal difference (i.e. goals conceded deducted from goals scored). These will be talked more in detail about further into the paper.
 
@@ -261,7 +261,7 @@ second_model <-
 #| echo: false
 #| eval: true
 #| label: tbl-model-predictions
-#| tbl-cap: "Comparision of Predicted League Points for Sir Alex's Continued Era and Other 8 Mangers with Actual League Points (2014-2023)"
+#| tbl-cap: "Comparison of Predicted League Points for Sir Alex's Continued Era and Other 8 Mangers with Actual League Points (2014-2023)"
 #| warning: false
 
 # Checked coefficients using the following function and then hard coded them in
@@ -321,7 +321,7 @@ ggplot(long_data, aes(x = factor(Year), y = `League Points`, fill = Manager)) +
   scale_fill_brewer(palette = "Set1")
 ```
 
-@fig-prediction shows a season by season comparision of how well Sir Alex would have done in terms of league points, with how well the other 8 managers are predicted to do, and how well the team did in real. It is important to note here that looking at @tbl-model-predictions and @fig-prediction, we realise that although Sir Alex is seen to would have done better on average between 2014 and 2023, the difference is not as much as we expected. For 8 out of 10 seasons, Sir Alex is predicted to have done better than the team performed. But as we will observe in @fig-prediction-delta and @tbl-prediction-delta, the difference is not a lot.
+@fig-prediction shows a season by season comparison of how well Sir Alex would have done in terms of league points, with how well the other 8 managers are predicted to do, and how well the team did in real. It is important to note here that looking at @tbl-model-predictions and @fig-prediction, we realise that although Sir Alex is seen to would have done better on average between 2014 and 2023, the difference is not as much as we expected. For 8 out of 10 seasons, Sir Alex is predicted to have done better than the team performed. But as we will observe in @fig-prediction-delta and @tbl-prediction-delta, the difference is not a lot.
 
 ```{r}
 #| eval: true
@@ -329,7 +329,7 @@ ggplot(long_data, aes(x = factor(Year), y = `League Points`, fill = Manager)) +
 #| message: false
 #| warning: false
 #| label: tbl-prediction-delta
-#| tbl-cap: "Comparision of Differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
+#| tbl-cap: "Comparison of Differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
 
 delta_table <- 
   tibble(
@@ -349,7 +349,7 @@ As we can see in @tbl-prediction-delta, the predicted League Points for Sir Alex
 #| message: false
 #| warning: false
 #| label: fig-prediction-delta
-#| fig-cap: "Plot for comparision of differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
+#| fig-cap: "Plot for comparison of differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
 #| fig-width: 8
 
 long_data_2 <- pivot_longer(delta_table, cols = -Year, names_to = "Difference", values_to = "League Points Difference")

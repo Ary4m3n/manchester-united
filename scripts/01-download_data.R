@@ -12,8 +12,11 @@
 # install.packages("worldfootballR")
 library(worldfootballR)
 library(tidyverse)
+library(styler)
 
 #### Download data ####
+# Used to style the code
+# style_file("scripts/01-download_data.R")
 
 # We run this in a loop to obtain raw data for the league table for a span of 20
 # years, i.e. 2004-2023.

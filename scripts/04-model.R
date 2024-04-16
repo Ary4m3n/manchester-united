@@ -14,6 +14,10 @@ library(janitor)
 library(dplyr)
 library(rstanarm)
 library(modelsummary)
+library(styler)
+
+# Used to style the code
+# style_file("scripts/04-model.R")
 
 #### Read data ####
 analysis_data2013 <- read_parquet("data/analysis_data/analysis_data2013.parquet")

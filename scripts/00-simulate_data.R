@@ -11,13 +11,17 @@
 #### Workspace setup ####
 library(tidyverse)
 library(janitor)
+library(styler)
 
 #### Simulate data ####
+# Used to style the code
+# style_file("scripts/00-simulate_data.R")
+
 # We set the seed here to help make this script reproducible
 set.seed(853)
 
 # This is the simulated data for the seasons under Sir Alex Ferguson (2004-2013).
-simulated_analysis_data2013 <- 
+simulated_analysis_data2013 <-
   tibble(
     "Year" = 2004:2013,
     "Rank" = sample(1:20, size = 10, replace = TRUE),
@@ -32,7 +36,7 @@ simulated_analysis_data2013 <-
   )
 
 # This is the simulated data for the seasons since Sir Alex Ferguson's era till date (2014-2023)
-simulated_analysis_data2023 <- 
+simulated_analysis_data2023 <-
   tibble(
     "Year" = 2014:2023,
     "Rank" = sample(1:20, size = 10, replace = TRUE),
@@ -45,7 +49,3 @@ simulated_analysis_data2023 <-
     "Goal Difference" = as.integer(`Goals Scored` - `Goals Conceded`),
     "League Points" = sample(40:80, size = 10, replace = TRUE)
   )
-
-
-
-

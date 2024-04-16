@@ -9,8 +9,12 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(styler)
 
 #### Test data ####
+# Used to style the code
+# style_file("scripts/03-test_data.R")
+
 # Here I will only test one data table because the other one is the same, just 
 # with a different set of years i.e. 2014-2023
 analysis_data2013 <- read_parquet("data/analysis_data/analysis_data2013.parquet")
