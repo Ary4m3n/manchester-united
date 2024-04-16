@@ -50,9 +50,9 @@ In (@sec-data-raw) we provide an overview of the raw data obtained, (@sec-data-c
 
 ## Raw Data {#sec-data-raw}
 
-As mentioned above, the raw data for this paper was collected from the R package and API `worldfootballR` [@citeWorldfootballR]. Team statistics per season for the English Premier League were obtained from the package. We obtained data per season, that implies that there were 20 files of raw data for 20 seasons we wish to analyze for 20 different teams in league each season. The dataset contained a lot of statistics that were not all relevant to us. Relevant statistics included the Squad Name, the finishing Rank, the number of Wins, Draws, Losses, Goals For, Goals Against, Goal Difference and the League Points. Other statistics included the Average Attendance per season, Expected Goals etc. 
+As mentioned above, the raw data for this paper was collected from the R package and API `worldfootballR` [@citeWorldfootballR]. Team statistics per season for the English Premier League were obtained from the package. We obtained data per season, that implies that there were 20 files of raw data for 20 seasons we wish to analyze for 20 different teams in league each season. The dataset contained a lot of statistics that were not all relevant to us. Relevant statistics included the Squad Name, the finishing Rank, the number of Wins, Draws, Losses, Goals For, Goals Against, Goal Difference and the League Points. Other statistics included the Average Attendance per season, Expected Goals etc.
 
-The next section (@sec-data-clean) will show the data cleaning process, further outlining the structure of the refined dataset employed in our analysis. 
+The next section (@sec-data-clean) will show the data cleaning process, further outlining the structure of the refined dataset employed in our analysis.
 
 ## Cleaned Data {#sec-data-clean}
 
@@ -76,15 +76,15 @@ kable(analysis_data2013)
 
 There are 10 columns in total in the League Statistics data table:
 
-1. The `Year` column refers to the Premier League season. Generally, a season starts in August and ends in May of the next year. Hence, seasons are generally represented as, for instance, 2003-2004. However, here for simplicity, the `Year` column refers to the year the season ends. So, the season 2003-2004 will be represented as 2004.
-2. The `Rank` column points to the position Manchester United finished in, in the particular season. The Rank is going to between 1 and 20 because there are 20 teams in the league each year.
-3. The `Wins` column contains the total number of wins by Manchester United in the particular season. There can be at maximum 38 wins because there are 38 games in total.
-4. The `Draws` column contains the total number of draws by Manchester United in the particular season. There can be at maximum 38 draws because there are 38 games in total.
-5. The `Losses` column contains the total number of losses by Manchester United in the particular season. There can be at maximum 38 losses because there are 38 games in total. Additionally, in total there are going to be 38 wins, draws and losses.
-6. The `Win Percentage (%)` column, also referred to as the *Success Percentage* is calculated as the total number of wins divided by the total number of games, i.e. 38. It is shown as a percentage for simplicity of understanding. It is understood that higher the Win Percentage, the better the season was, and the better the league points will be.
-7. The `Goals Scored` column outlines the number of goals scored by the team in the particular season. It is understood that this measure is a good indicator of how well the offense played in a particular season. The higher the goals scored, the better the offense played.
-8. The `Goals Conceded` column outlines the number of goals conceded by the team in the particular season. It is understood that this measure is a good indicator of how well the defense played in a particular season. The lower the goals conceded, the better the defense played.
-9. The `Goal Difference` column outlines the difference between the number of goals scored and goals conceded. It is understood that this measure is a good indicator of how well the team played as a whole. This value can be negative as well, implying that the team did bad in the season. 
+1.  The `Year` column refers to the Premier League season. Generally, a season starts in August and ends in May of the next year. Hence, seasons are generally represented as, for instance, 2003-2004. However, here for simplicity, the `Year` column refers to the year the season ends. So, the season 2003-2004 will be represented as 2004.
+2.  The `Rank` column points to the position Manchester United finished in, in the particular season. The Rank is going to between 1 and 20 because there are 20 teams in the league each year.
+3.  The `Wins` column contains the total number of wins by Manchester United in the particular season. There can be at maximum 38 wins because there are 38 games in total.
+4.  The `Draws` column contains the total number of draws by Manchester United in the particular season. There can be at maximum 38 draws because there are 38 games in total.
+5.  The `Losses` column contains the total number of losses by Manchester United in the particular season. There can be at maximum 38 losses because there are 38 games in total. Additionally, in total there are going to be 38 wins, draws and losses.
+6.  The `Win Percentage (%)` column, also referred to as the *Success Percentage* is calculated as the total number of wins divided by the total number of games, i.e. 38. It is shown as a percentage for simplicity of understanding. It is understood that higher the Win Percentage, the better the season was, and the better the league points will be.
+7.  The `Goals Scored` column outlines the number of goals scored by the team in the particular season. It is understood that this measure is a good indicator of how well the offense played in a particular season. The higher the goals scored, the better the offense played.
+8.  The `Goals Conceded` column outlines the number of goals conceded by the team in the particular season. It is understood that this measure is a good indicator of how well the defense played in a particular season. The lower the goals conceded, the better the defense played.
+9.  The `Goal Difference` column outlines the difference between the number of goals scored and goals conceded. It is understood that this measure is a good indicator of how well the team played as a whole. This value can be negative as well, implying that the team did bad in the season.
 10. The `League Points` column indicates to the total number of points scored that season. This indicator is essential in determining where the teams end up in the league. A team receives 3 points for a win, 1 point for a draw and 0 points for a loss.
 
 We will be using the *Win* or *Success Percentage*, *Goals Scored* and *Goal Difference* as our predictors to model for the *League Points* ahead, which will be explained in detail in (@sec-model). Now, in (@sec-data-measurement), we will delve into the measurement aspects of the data presented in the tables shown. Understanding this process is crucial for drawing meaningful insights from the data analysis results.
@@ -93,7 +93,7 @@ We will be using the *Win* or *Success Percentage*, *Goals Scored* and *Goal Dif
 
 According to the Premier League [@citePLstats], all the official performance data is collected and reported by Opta, a part of Stats Perform [@citeStatsperform]. All the data is collected by a team of three people which cover each match. These three people include two highly trained analysts who go through video-based collection system to gather data, and a quality control analyst who can rewind the video feed frame-by-frame to make sure the data collected is correct [@citePLstats]. Additionally, the data collected is then subject to an exhaustive post-match check to ensure accuracy. This comprehensive process ensures that the data collected is complete and highly accurate. As the data analyzed in this paper is *not* collected and reported by the teams themselves, it is highly unlikely that a collection bias would exist. However, some might argue that some teams might be able to pressure the officials into tipping the statistics over in their favor, but this might be highly unlikely as well.
 
-The `Win Percentage` or also referred to as the `Success Percentage` was calculated manually by taking taking a ratio of the wins in a season and the total number of games in a season (i.e. 38). As mentioned above, as the wins were reported by Opta [@citePLstats] and not by individual teams, hence once again the issues about any biases caused can be avoided. 
+The `Win Percentage` or also referred to as the `Success Percentage` was calculated manually by taking taking a ratio of the wins in a season and the total number of games in a season (i.e. 38). As mentioned above, as the wins were reported by Opta [@citePLstats] and not by individual teams, hence once again the issues about any biases caused can be avoided.
 
 There might be a concern when considering the fact that this paper analyses data for the past 20 years. There might have been a difference in data reporting back in 2004 when compared to right now. It is essential to note that, this difference would have a bigger impact on data for a minute to minute match data analysis. However, in this report we use data about each season. As this data includes most the number of points scored, wins, draws, losses and goals, we work under the assumption that this data should not be affected to a large extent. However, at the same time it is important to still acknowledge that data collection in the past could have impacted the data being analyzed and modeled with.
 
@@ -136,7 +136,7 @@ The results section divided into two parts. @sec-results1 outlines the compariso
 
 ## Comparison of Predictors: Ferguson's Era vs. Subsequent Periods {#sec-results1}
 
-@fig-winpercentage shows us a side-by-side comparison of the Win or Success Percentage for when Manchester United was managed by Sir Alex Ferguson (@fig-winpercentage-1) and when it was managed by the subsequent 8 managers (@fig-winpercentage-2). We can clearly see in @fig-winpercentage-1 that the Win Percentage ranges from 60%-75% approximately, whereas, on the other hand in @fig-winpercentage-2, the Win Percentage ranges from 40%-65% approximately. There is a very clear difference observed between performances in each of these eras. Remarkably, during Sir Alex's era (2004-2013), the win percentage was above 70% for 6 out of 10 years. On the other hand, during the subsequent era (2014-2023), the win percentage was below or equal to 55% for 8 out of 10 years. It is believed that this indicator has a direct impact on the league points scored for that season. From @fig-winpercentage, we can certainly infer a more successful managership by Sir Alex. 
+@fig-winpercentage shows us a side-by-side comparison of the Win or Success Percentage for when Manchester United was managed by Sir Alex Ferguson (@fig-winpercentage-1) and when it was managed by the subsequent 8 managers (@fig-winpercentage-2). We can clearly see in @fig-winpercentage-1 that the Win Percentage ranges from 60%-75% approximately, whereas, on the other hand in @fig-winpercentage-2, the Win Percentage ranges from 40%-65% approximately. There is a very clear difference observed between performances in each of these eras. Remarkably, during Sir Alex's era (2004-2013), the win percentage was above 70% for 6 out of 10 years. On the other hand, during the subsequent era (2014-2023), the win percentage was below or equal to 55% for 8 out of 10 years. It is believed that this indicator has a direct impact on the league points scored for that season. From @fig-winpercentage, we can certainly infer a more successful managership by Sir Alex.
 
 ```{r}
 #| eval: true
@@ -202,7 +202,7 @@ ggplot(analysis_data2023, aes(x = Year, y = `Goals Scored`)) +
   theme_minimal()
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis gravida in felis sit amet porta. Cras eros nulla, malesuada eget molestie auctor, vestibulum et risus. Vestibulum et enim ac velit tempus consectetur. Mauris ullamcorper erat vitae nunc porta, vel egestas quam viverra. Vivamus at venenatis arcu, vel congue sem. Nulla facilisi. Fusce quis diam eros. Duis in turpis in lectus bibendum pharetra. Proin dapibus tellus sed enim pellentesque tincidunt. Morbi tempor iaculis lorem ac efficitur. Pellentesque lacus nulla, tempor id magna vel, ornare venenatis ante. Fusce blandit est mauris, at ullamcorper massa tincidunt id. In vulputate odio ut pretium varius. Cras pharetra diam lorem, in auctor nulla consequat eget.
+Finally, @fig-goal-difference shows a side-by-side comparison of the Goal Difference for when Manchester United was managed by Sir Alex Ferguson (@fig-goal-difference-1) and when it was managed by the subsequent 8 managers (@fig-goal-difference-2). We observe that for Sir Alex's era the goal difference ranges from 30-60 goals, most of which are above 40 goals (in difference). On the other hand, for the subsequent period of time, the goals scored are lesser than 25 in approximately 7 out of 10 years. We also see that for 2022, the goal difference is 0. This means that the defense was not as effective to win games, which is seen by the extremely low win percentage that year (42.11%). This indicator is extremely necessary in communicating how the whole team, including offense and defense performed that season.
 
 ```{r}
 #| eval: true
@@ -235,10 +235,15 @@ ggplot(analysis_data2023, aes(x = Year, y = `Goal Difference`)) +
   theme_minimal()
 ```
 
+In @sec-results2 we will communicate the model summary, attempt to predict how Sir Alex would have fared in the years 2014-2023, and discuss a comparison between the increase in league points scored over the subsequent years when compared with the other 8 managers.
+
 ## Predicting League Points Under Extended Ferguson Era {#sec-results2}
 
+As mentioned earlier in the paper, we run two models, for the time periods 2004-2013 and 2014-2023. This is essentially to be able to model Sir Alex's last 10 years at Manchester United, as well as the performance of the other 8 managers in the subsequent years. Creating two models allows us with inference and also comparison of predictions of how both models would fare in the dark era for Manchester United i.e. 2014-2023. @sec-model-summary provides the Model Summary for the two models we want to study in this paper (@tbl-model-summary).
 
-<!-- Our results are summarized in @tbl-modelresults. -->
+We observe that both our models show a high positive correlation between the *Win Percentage* and the *end-of-season League Points*, where Sir Alex's model gives us a higher correlation than the other model. This satisfies our hypothesis that as the Win Percentage increases, so will the League Points. We see a surprising negative correlation between the *Goals Scored* and the *end-of-season League Points*. This could be the case as we only looked at 10 years in each era, making the number of observations insufficient to find an appropriate correlation. However, the coefficients along with the standard error might suggest that these results for Goals Scored are not necessarily significant in this model. Finally, as expected, we see a positive correlation between *Goal Difference* and the *end-of-season League Points*. This again satisfies our hypothesis that as the Goal Difference increases, so will the League Points.
+
+Now we will move on to the main focus and aim of the paper, i.e. to predict Sir Alex's performance, using the model, between years 2014-2023 and comparing it with the actual performance and the modeled for performance by the other 8 managers between 2014-2023.
 
 ```{r}
 #| echo: false
@@ -252,51 +257,138 @@ second_model <-
   readRDS(file = here::here("models/second_model.rds"))
 ```
 
-<!-- #  -->
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-model-predictions
+#| tbl-cap: "Comparision of Predicted League Points for Sir Alex's Continued Era and Other 8 Mangers with Actual League Points (2014-2023)"
+#| warning: false
 
-<!-- # ```{r} -->
+# Checked coefficients using the following function and then hard coded them in
+# coef(first_model)
+model1_intercept <- 29.19502452
+model1_win_percentage <- 0.81149008
+model1_goals_scored <- -0.01928642
+model1_goal_difference <- 0.02301748
 
-<!-- # #| echo: false -->
+# Checked coefficients using the following function and then hard coded them in
+# coef(second_model)
+model2_intercept <- 30.67426069
+model2_win_percentage <- 0.73267419
+model2_goals_scored <- -0.06443846
+model2_goal_difference <- 0.17938349
 
-<!-- # #| eval: true -->
+prediction_table <- read_parquet("../data/analysis_data/analysis_data2023.parquet", show_col_types = FALSE)
 
-<!-- # #| label: tbl-modelresults -->
+prediction_table$`Sir Alex` <- with(prediction_table, 
+                                  round(model1_intercept + 
+                                    (model1_win_percentage * `Win Percentage (%)`) + 
+                                    (model1_goals_scored * `Goals Scored`) + 
+                                    (model1_goal_difference * `Goal Difference`)))
+prediction_table$`Other 8 Managers` <- with(prediction_table, 
+                                  round(model2_intercept + 
+                                    (model2_win_percentage * `Win Percentage (%)`) + 
+                                    (model2_goals_scored * `Goals Scored`) + 
+                                    (model2_goal_difference * `Goal Difference`)))
 
-<!-- # #| tbl-cap: "Explanatory models of flight time based on wing width and wing length" -->
+final_pred_table <- prediction_table[, c("Year", "Sir Alex", "Other 8 Managers", "League Points")]
 
-<!-- # #| warning: false -->
+kable(final_pred_table|>
+  rename(
+    `Actual Points` = `League Points`
+  ))
+```
 
-<!-- #  -->
+@tbl-model-predictions contains 4 columns. It shows seasons from 2014-2023, the predicted end-of-season league points for Sir Alex Ferguson, the modeled end-of season league points for the other 8 managers and finally the actual league points obtained that year by Manchester United.
 
-<!-- # modelsummary::modelsummary( -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-prediction
+#| fig-cap: "Comparing League Points for predicted Sir Alex extended tenure, modeled other 8 managers and actual league points (2014-2023)"
+#| fig-height: 3.1
 
-<!-- #   list( -->
+long_data <- pivot_longer(final_pred_table, cols = -Year, names_to = "Manager", values_to = "League Points")
 
-<!-- #     "First model" = first_model -->
+ggplot(long_data, aes(x = factor(Year), y = `League Points`, fill = Manager)) + 
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  labs(title = "League Points by Year", x = "Year", y = "League Points") +
+  theme_minimal() + 
+  scale_y_continuous(breaks = seq(45, 85, by = 5)) +
+  coord_cartesian(ylim = c(45, 85)) + 
+  scale_fill_brewer(palette = "Set1")
+```
 
-<!-- #   ), -->
+@fig-prediction shows a season by season comparision of how well Sir Alex would have done in terms of league points, with how well the other 8 managers are predicted to do, and how well the team did in real. It is important to note here that looking at @tbl-model-predictions and @fig-prediction, we realise that although Sir Alex is seen to would have done better on average between 2014 and 2023, the difference is not as much as we expected. For 8 out of 10 seasons, Sir Alex is predicted to have done better than the team performed. But as we will observe in @fig-prediction-delta and @tbl-prediction-delta, the difference is not a lot.
 
-<!-- #   statistic = "mad", -->
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: tbl-prediction-delta
+#| tbl-cap: "Comparision of Differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
 
-<!-- #   fmt = 2 -->
+delta_table <- 
+  tibble(
+    Year = final_pred_table$Year,
+    `Sir Alex - Other 8 Manager Points` = final_pred_table$`Sir Alex` - final_pred_table$`Other 8 Managers`,
+    `Sir Alex - Actual Points` = final_pred_table$`Sir Alex` - final_pred_table$`League Points`
+  )
 
-<!-- # ) -->
+kable(delta_table)
+```
 
-<!-- # ``` -->
+As we can see in @tbl-prediction-delta, the predicted League Points for Sir Alex's extended tenure are always greater than the modeled for other 8 managers League Points between 2014 and 2023. On average, Sir Alex would would score **1.9** more points per season than the other 8 managers modeled prediction over the period of 2014-2023. Similarly, the predicted League Points for Sir Alex's extended tenure are greater than the actual league points received in 8 out of 10 seasons. For the seasons 2016-2017, and 2020-2021, we see that Sir Alex would have probably done worse than how the team performed in real. On average, Sir Alex would score **1.8** more points per season than the team did in real. We see that although there is an improvement in average league points, this difference is not as much as we have would have expected it to be. This will be explored in full depth in @sec-discussion.
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-prediction-delta
+#| fig-cap: "Plot for comparision of differences between League Points for Sir Alex's Continued Era and Other 8 Mangers and between Actual League Points (2014-2023)"
+#| fig-width: 8
+
+long_data_2 <- pivot_longer(delta_table, cols = -Year, names_to = "Difference", values_to = "League Points Difference")
+
+ggplot(long_data_2, aes(x = factor(Year), y = `League Points Difference`, fill = Difference)) + 
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  labs(title = "Difference in League Points by Season", x = "Year", y = "Difference Between League Points") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set1") +
+  geom_text(aes(label = `League Points Difference`), position = position_dodge(width = 0.9), vjust=-0.25, color = "black")
+```
+
+Hence, finally in @sec-discussion, we will explore the reasons behind why we observed a marginal improvement in Sir Alex's Performance in recent times and not as much as we expected we would. We will also discuss biases, weaknesses and further research in this field.
 
 # Discussion {#sec-discussion}
 
-## First discussion point {#sec-first-point}
+## Findings: Exploring Sir Alex's Only Marginal Improvement to Manchester United between 2014-2023 {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
+For the first part of our research, our results tell us about the state of the club. With the comparisons in @sec-results1, we can certainly affirm that Manchester United is in a worse state than it was 11 years ago under Sir Alex Ferguson. This can specifically be seen by the sudden drop in all three of Win Percentage, Goals Scored and Goal Difference between 2014-2023. This has consequently affected the performance of the team in recent times. This can be because of the following reasons:
 
-## Second discussion point
+Firstly, as the English Premier League is a league based (or points based competition), success or the finishing position depends a lot on how well the other clubs are doing in the table too. For instance, Jürgen Klopp joined Liverpool in 2015, since when he has registered exceptional statistics every year. He was won the Premier League once in 2020, and in 328 matches has won 206 games, drawn 76 and lost just 46 [@citeJurgen]. Similarly, Pep Guardiola joined Manchester City, Manchester United's city rivals, in 2016. Since then, he has won the Premier League 5 times in 2018, 2019, 2021, 2022, 2023, and in just 298 matches has register 219 wins, 41 draws and just 38 losses. Manchester City's dominance can be extended by also taking into account that they won the treble in 2023, which includes winning the Premier League, the UEFA Champions league and the FA cup all in one season [@citePep]. With Manchester United's troubles of finding an appropriate manager for the club, it gets tough to compete with clubs like Liverpool and Manchester City which are on an exceptional run. Some individuals in the football community compare Pep Guardiola's success to that of Sir Alex because of his incredible tenure at Manchester City.
 
-## Third discussion point
+This leads to the second point of why Manchester United might not be doing as well right now as it was when Sir Alex was the manager. Since, Sir Alex's departure, the club has been unable to find the appropriate manager. This can be seen by looking at the fact that Manchester United has had 8 managers in the past 10 years. Additionally, there has been a lot of outrage against the current owners of the club who have been claimed to be doing a poor job at running the club. With speculations of a change in ownership in 2023, there was a lot of positivity towards the betterment of the club, hence contributing to the second best season with 75 league points in the past 11 years. However, the ownership did not change leading to the position in the 2024 season being much worse. Along with this, it is also believed that the poor transfer of players into Manchester United, along with overpaying for transfer fee and being exploited in the market has led to the clubs bad financial situation as well as lack of quality.
 
-## Weaknesses and next steps
+Moving on to the second part of our research, we see that although our results satisfy our hypothesis of how Sir Alex would on average do better than the other 8 managers, however there is only a very marginal increase seen in the prediction of if were to Sir Alex manage the club in the subsequent time period of 2014-2023. In @sec-results1, we saw that there are significant differences in how well Manchester United performed under Sir Alex when compared to the other 8 managers. We see in @fig-winpercentage, @fig-goals-scored and @fig-goal-difference that all three predictors show a much better performance under Sir Alex. On average, Sir Alex would score **1.8** more points per season than the team did in real. This is not a very significant number of points. As mentioned above, a win is 3 points and a draw is 1 point. According to the differences in Win Percentage, Goals Scored and Goal Difference we observed in @sec-results1, the predicted league points should have ideally been higher. When compared to the modeled prediction for the other 8 managers, we see that Sir Alex would score on average **1.9** more points per season. Again, this improvement in performance is only marginal and not as to what we expected.
 
-Weaknesses and next steps should also be included.
+There can be several reasons why we do not see the desired extent of increase in points which will explored in @sec-second-point.
+
+## Weaknesses {#sec-second-point}
+
+In this section, we will explore the various weaknesses that can probably be the reason for our results not being as high as we would have expected them to be. Firstly, there are a lot of lurking factors that come into play when assessing a team's performance in a season which can not be added to the model as they are not easily quantifiable. These factors would certainly play a part in improving the model. For instance, player morale is a very important factor to take into account. There have been a lot of reports in recent times sharing concerns of Manchester United players feeling like current managers' approach is affecting team morale [@citeMorale]. There have been numerous reports of unhappy players back lashing on the management in recent times. I believe that this indicator can have a major influence on the performance of the squad. However, it is very tough to quantify this indicator hence it was not added to our model.
+
+Moving on, I believe that possession stats for the whole season on average can be an indicator of how well the squad is being able to dominate the field when playing. It is believed that higher the possession is the more goals a team will score. However, there were two issues when we considered adding this indicator to the model. First, for data that dated a decade ago, this statistic was not reported. Due to this, this indicator could not be added as a predictor in the model. Second, I believe that possession can vary depending on playing style as well as the managerial style too. Some managers believe in keeping the possession and playing out from the back line, however, the others might believe in counter-attack football. For instance, for the season 2020-2021, Manchester United was being managed by Ole Gunnar Solskjær [@citeOle], who preferred to play a more counter-attack style of football. That season Manchester United finished the season in 2nd place with a possession of 55.7%. Chelsea finished the season in 4th place with a possession of 60.9% [@citeWorldfootballR]. Hence, looking at this data it seemed after primary analysis that this predictor might not actually result with a significant correlation. 
+
+Hence, there are always more predictors that can be used to make the model more nuanced, however, for this paper we chose the predictors according to which ones were actually making sense in having a relationship with the variable being studied, i.e. League Points.
+
+## Further Scope
+
+As a further scope, it would be interesting to look at the impact of financial decisions on the performance of clubs and squads in the league. It is widely known there clubs vary in terms of the finances that are available and hence have better facilities, stadiums, marketing, and player signings. Some teams just are not able to sign more expensive players, whereas others are able to make teams of the best players in the world. This is of a lot of relevance in recent times with the growing popularity of the Saudi Pro League with the big-name signings and packages of Cristiano Ronaldo, Neymar and Karim Benzema. Similarly, the MLS has grown in popularity as well with the signing of Lionel Messi by Inter Miami. It can be conjectured that in today's football world, sound finances and a wealthy owner can push a team closer to success. It would be very interesting to take into account the moves in the transfer market and how effective they have been. This data can also be retreived from the R package and API `worldfootballR` [@citeWorldfootballR].
 
 \newpage
 
@@ -305,6 +397,7 @@ Weaknesses and next steps should also be included.
 # Appendix {.unnumbered}
 
 # Additional data details
+
 ```{r}
 #| echo: false
 #| eval: true
@@ -322,11 +415,34 @@ kable(analysis_data2023)
 
 # Model details {#sec-model-details}
 
+## Model Summary {#sec-model-summary}
+
+@tbl-model-summary presents the Model Summary for Model 1 which entails Sir Alex's Era (2004-2013) and Model 2 which entails Subsequent Periods (2014-2023).
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-model-summary
+#| tbl-cap: "Model Summary for Model 1: Sir Alex's Era (2004-2013) and Model 2: Subsequent Periods (2014-2023)"
+#| warning: false
+
+modelsummary::modelsummary(
+  list(
+    "Sir Alex (2004-2013)" = first_model,
+    "Other 8 Managers (2014-2023)" = second_model
+  ),
+  statistic = "mad",
+  fmt = 2
+)
+```
+
+\newpage
+
 ## Posterior predictive check
 
 In @fig-ppcheckandposteriorvsprior-1 and @fig-ppcheckandposteriorvsprior2-1 we implement a posterior predictive check for the first model for the era 2004-2013 and the second model for the era 2014-2023 respectively. This compares the actual outcome variable, i.e. *end-of-season league points* with simulations from the posterior distribution. We can see that as the posterior is able to simulate the data, the model does a good job of fitting the data.
 
-In @fig-ppcheckandposteriorvsprior-2 and @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior for the first model for era 2004-2013 and the second model for the era 2014-2023 respectively. We do this to see how much the estimates change once data is taken into account. 
+In @fig-ppcheckandposteriorvsprior-2 and @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior for the first model for era 2004-2013 and the second model for the era 2014-2023 respectively. We do this to see how much the estimates change once data is taken into account.
 
 ```{r}
 #| eval: true
@@ -389,7 +505,6 @@ posterior_vs_prior(second_model) +
 plot(first_model, "trace")
 plot(first_model, "rhat")
 ```
-
 
 ```{r}
 #| echo: false
