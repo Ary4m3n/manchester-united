@@ -35,7 +35,7 @@ Sir Alex Ferguson managed the club between 1986 and 2013 where he led the team t
 
 Sir Alex Ferguson retired after the 2012-2013 season and that marked the now seen downfall of the club in recent times. Since the 2012-2013 season, Manchester United has seen 8 different managers and a significant drop in the stature of the club around trophies and wins [@citeManUtdManagers]. For context, the club won 38 trophies under Sir Alex and merely 5 trophies in total since his retirement under 8 different managers [@citeManUtdTrophies]. Additionally, the club has not won the English Premier League since Sir Alex's last season, 2012-2013, whereas they won 13 titles when under Sir Alex.
 
-The aim of this paper is twofold, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the estimand: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute to the debate about the greatest manager of all time.
+The aim of this paper is twofold, where in the paper will first analyze the differences in performance between 2004-2013 (Sir Alex's era) and 2014-2023 (Post Sir Alex's era). Then, we will use this knowledge to build two Bayesian Models to predict and further analyze the **estimand**: Average League Points in each season for 2004-2013 and 2014-2023. The paper will also illustrate *how much* better Manchester United's position would have been in 2014-2023 if Sir Alex Ferguson would not have retired, helping us contribute to the debate about the greatest manager of all time.
 
 The structure of this paper comprises four sections: Data, Model, Results and Discussion. In the Data section (@sec-data), we discuss the data source and the process of measuring and cleaning the datasets. In the Model section (@sec-model), we discuss the two Bayesian Models used in the paper, their justifications and how it was constructed. This section will also touch on the process of predicting the league points for 2014-2023 if Sir Alex were managing the club then. In the Results section (@sec-results), we delve deeper into the trends observed. Finally, in the Discussion section (@sec-discussion), we discuss the possible factors around contributing to Sir Alex's success, along with limitations and further research.
 
@@ -108,19 +108,34 @@ Here we briefly describe the Bayesian analysis model used to investigate and stu
 
 ## Model set-up
 
-Define $y_i$ as the end-of-season league points obtained by Manchester United. Then $\beta_i$ is the win or success percentage for the season, $\gamma_i$ is the number of goals scored in the season, and $\delta_i$ is the goal difference for the season.
+Define $y_i$ as the end-of-season league points obtained by Manchester United. Then $\beta_1$ is the win or success percentage for the season, $\gamma_1$ is the number of goals scored in the season, and $\delta_1$ is the goal difference for the season. The two models in this paper were run with auto scaling priors values for which have been obtained by running `prior_summary`. Model 1 for the time period 2004-2013 is represented as:
 
 ```{=tex}
 \begin{align} 
 y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
 \mu_i &= \alpha + \beta_i + \gamma_i + \delta_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\delta &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
+\alpha &\sim \mbox{Normal}(0, 15) \\
+\beta &\sim \mbox{Normal}(0, 2.13) \\
+\gamma &\sim \mbox{Normal}(0, 1.30) \\
+\delta &\sim \mbox{Normal}(0, 1.25) \\
+\sigma &\sim \mbox{Exponential}(0.18)
 \end{align}
 ```
+
+Model 2 for the time period 2014-2023 is represented as:
+
+```{=tex}
+\begin{align} 
+y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
+\mu_i &= \alpha + \beta_i + \gamma_i + \delta_i\\
+\alpha &\sim \mbox{Normal}(0, 16) \\
+\beta &\sim \mbox{Normal}(0, 2.36) \\
+\gamma &\sim \mbox{Normal}(0, 2.27) \\
+\delta &\sim \mbox{Normal}(0, 1.43) \\
+\sigma &\sim \mbox{Exponential}(0.15)
+\end{align}
+```
+
 We run the model in R [@citeR] using the `rstanarm` package of [@rstanarm]. We use the default priors from `rstanarm`.
 
 ### Model justification
