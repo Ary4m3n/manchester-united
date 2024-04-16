@@ -1,6 +1,5 @@
 ---
 title: "Sir Alex Ferguson's Continued Tenure Could Have Only Marginal Improvements over Manchester United's EPL Performance"
-subtitle: "An Analysis of an Increase in League Points"
 author: 
   - Aryaman Sharma
 thanks: "Code and data are available at: https://github.com/Ary4m3n/manchester-united.git"
